@@ -27,7 +27,7 @@ const SecurityInfo = forwardRef((props,ref) => {
 
       if (data.password !== data.confirmPassword) {
         isValid = false;
-        alert("PIN and confirmation PIN must match.");
+        alert("Password and confirmation Password must match.");
       }
 
       if (isValid) {
