@@ -45,10 +45,10 @@
     #54ec87 967px, #15bd60 968px,
 
     #05db62 968px, #05db62 1088px,
-    #71d999 1088px, #3ed062 1090px,
+    #4ee688 1088px, #3ed062 1090px,
 
     #0dda73 1090px, #0dda73 1210px,
-    #52e88e 1210px, #2cd15b 1212px,
+    #16d37e 1210px, #0dda73 1212px,
 
     #0dda73 1212px, #1aef84 1332px,
     #67ef92 1332px, #63de96 1334px,
@@ -97,11 +97,6 @@
 
 .photo-upload-personal{
   flex: 1;
-  /* border: 2px solid #ccc; */
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* justify-content: flex-start; */
-  /* align-items: flex-start; */
 }
 
 
@@ -122,7 +117,7 @@ h3 {
   height: 1px;
   background-color: #c9c9c9; 
   border-radius: 2px;
-  margin:10px 0px 40px 0px;       
+  /* margin:10px 0px 40px 0px;        */
 }
 
 
@@ -137,6 +132,11 @@ h3 {
 
 .form-group-personal.full-width {
     grid-column: span 2;
+}
+
+.form-group-header-personal.full-width{
+    grid-column: span 2;
+    /* margin-bottom: 0; */
 }
 
 
@@ -161,6 +161,17 @@ h3 {
   margin-top: 15px;
   height: 60px;
 }
+
+.error-text {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+input:read-only{
+  color: gray;
+}
+
 
 
 

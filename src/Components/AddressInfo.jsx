@@ -1,12 +1,52 @@
-import React from 'react';
+import React, { useRef, useContext, useEffect, forwardRef, useImperativeHandle } from 'react';
 import './AddressInfo.css';
-import { useContext } from 'react';
 import { ImageContext } from '../context/ImageContext';
-// import './ImageUpload.css';
 
 
-const AddressInfo = () => {
+const AddressInfo = forwardRef((props, ref) => {
+  const formRef = useRef();
   const { image } = useContext(ImageContext);
+
+  useImperativeHandle(ref, () => ({
+    validateAndSave: () => {
+      const form = formRef.current;
+      const formData = new FormData(form);
+
+      console.log([...formData.entries()]);
+
+
+      const requiredFields = ['region', 'city', 'residentialAddress', 'digitalAddress'];
+      const data = {};
+      let isValid = true;
+
+      requiredFields.forEach((field) => {
+        const rawValue = formData.get(field);
+        const value = rawValue ? rawValue.trim() : '';
+        if (!value) isValid = false;
+        data[field] = value;
+      });
+
+      if (isValid) {
+        sessionStorage.setItem('addressInfo', JSON.stringify(data));
+        sessionStorage.setItem('stepCompleted:/address', 'true');
+      } else {
+        alert("Please fill all required address fields.");
+      }
+
+      return isValid;
+    }
+  }));
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem('addressInfo');
+    if (saved && formRef.current) {
+      const data = JSON.parse(saved);
+      Object.keys(data).forEach((key) => {
+        const input = formRef.current.elements[key];
+        if (input) input.value = data[key];
+      });
+    }
+  }, []);
 
   return (
     <div className="main-wrapper-address">
@@ -22,16 +62,6 @@ const AddressInfo = () => {
         <div className="form-content-address">
 
           <div className="photo-upload-address">
-
-            {/* <div className="w-20 h-20 rounded-full overflow-hidden">
-              {image ? (
-                <img src={image} alt="User" className="object-cover w-full h-full" />
-              ) : (
-                <div className="bg-gray-200 w-full h-full flex items-center justify-center text-sm text-gray-500">
-                  No Image
-                </div>
-              )}
-            </div> */}
 
             <div className="image-upload-container">
               {image ? (
@@ -59,18 +89,12 @@ const AddressInfo = () => {
           </div>
           
           <div className="address-details-address">
-            <h3>Address Details</h3>
-            <div className="section-underline-address"></div>
 
-            <form action="/submit" method="POST" className="grid-form-address">
-              <div className="form-group-address">
-                <label htmlFor="residentialAddress">Residential Address:</label>
-                <input type="text" id="residentialAddress" name="residentialAddress" placeholder='Enter your Residential Address' required/>
-              </div>
+            <form ref={formRef} action="/submit" method="POST" className="grid-form-address">
 
-              <div className="form-group-address">
-                <label htmlFor="city">City:</label>
-                <input type="text" id="city" name="city" placeholder='Enter your Residential Address' required />
+              <div className="form-group-header-address full-width">
+                <h3>Address Details</h3>
+                <div className="section-underline-address"></div>
               </div>
 
               <div className="form-group-address">
@@ -91,17 +115,29 @@ const AddressInfo = () => {
               </div>
 
               <div className="form-group-address">
+                <label htmlFor="city">City:</label>
+                <input type="text" id="city" name="city" placeholder='Enter your Residential Address' required />
+              </div>
+
+              
+              <div className="form-group-address">
+                <label htmlFor="residentialAddress">Residential Address:</label>
+                <input type="text" id="residentialAddress" name="residentialAddress" placeholder='Enter your Residential Address' required/>
+              </div>
+
+
+              <div className="form-group-address">
                 <label htmlFor="digitalAddress">Digital Address:</label>
                 <input type="text" id="digitalAddress" name="digitalAddress" placeholder='Enter your Digital Address' required />
               </div>
 
+              
             </form>
-
           </div>
         </div>
       </div>
     </div>
   );
-};
+});
 
 export default AddressInfo;

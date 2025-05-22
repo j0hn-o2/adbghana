@@ -109,12 +109,12 @@ h3 {
     color: #333;
 }
 
-.section-underline {
+.section-underline-security {
   width: 100%;               
   height: 1px;
   background-color: #c9c9c9; 
   border-radius: 2px;
-  margin:10px 0px 40px 0px;       
+  /* margin:10px 0px 40px 0px;       */
 }
 
 .grid-form-security {
@@ -149,4 +149,18 @@ h3 {
   border: 1px solid #ccc;
   margin-top: 15px;
   height: 60px;
+}
+
+.form-group-security input.show-security{
+  position: relative;
+}
+
+.toggle-icon {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #666;
 }

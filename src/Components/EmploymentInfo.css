@@ -114,7 +114,12 @@ h3 {
   height: 1px;
   background-color: #c9c9c9; 
   border-radius: 2px;
-  margin:10px 0px 40px 0px;       
+  /* margin:10px 0px 40px 0px;        */
+}
+
+.form-group-header-employment.full-width{
+    grid-column: span 2;
+    /* margin-bottom: 0; */
 }
 
 .grid-form-employment {

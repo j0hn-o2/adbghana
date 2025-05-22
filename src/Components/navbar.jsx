@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './navbar.css';
 
-function Navbar() {
+function Navbar({ personalRef, addressRef, employmentRef, securityRef, onSubmit}) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -17,8 +17,33 @@ function Navbar() {
   const nextStep = steps[currentIndex + 1];
   const prevStep = steps[currentIndex - 1];
 
-  const handleNext = () => {
-    if (nextStep) {
+  const handleNext = async () => {
+    let canProceed = true;
+
+    console.log("Can proceed:", canProceed);
+
+
+    if (location.pathname === '/' && personalRef?.current?.validateAndSave) {
+      canProceed = personalRef.current.validateAndSave();
+    }
+
+    if (location.pathname === '/address' && addressRef?.current?.validateAndSave) {
+      canProceed = addressRef.current.validateAndSave();
+    }
+
+    if (location.pathname === '/employment' && employmentRef?.current?.validateAndSave) {
+      canProceed = employmentRef.current.validateAndSave();
+    }
+
+    if (location.pathname === '/security' && securityRef?.current?.validateAndSave) {
+      canProceed = securityRef.current.validateAndSave();
+    }
+
+    if (location.pathname === '/review' && typeof onSubmit === 'function') {
+      canProceed = await onSubmit(); // 🔥 await submit function
+    }
+
+    if (canProceed && nextStep) {
       navigate(nextStep.path);
     }
   };
@@ -33,21 +58,46 @@ function Navbar() {
     <nav className="navbar">
       <button className="cancel-button">Cancel</button>
 
-      
-
       <ol className="navbar-list">
         {steps.map((step, index) => (
           <li key={index} data-step={index + 1}>
             <Link
               to={step.path}
-              className={location.pathname === step.path ? 'active-step' : ''}
+              onClick={(e) => {
+                const isFutureStep = index > currentIndex;
+                const currentPath = steps[currentIndex].path;
+
+                let valid = true;
+
+                // Check validation for current step BEFORE allowing jump
+                if (currentPath === '/' && personalRef?.current?.validateAndSave) {
+                  valid = personalRef.current.validateAndSave();
+                }
+
+                if (currentPath === '/address' && addressRef?.current?.validateAndSave) {
+                  valid = addressRef.current.validateAndSave();
+                }
+
+                if (currentPath === '/employment' && employmentRef?.current?.validateAndSave) {
+                  valid = employmentRef.current.validateAndSave();
+                }
+
+                if (currentPath === '/security' && securityRef?.current?.validateAndSave) {
+                  valid = securityRef.current.validateAndSave();
+                }
+
+                if (isFutureStep && !valid) {
+                  e.preventDefault(); // ❌ Block jump if current form is invalid
+                }
+              }}
             >
               {step.label}
             </Link>
+
           </li>
         ))}
       </ol>
-      
+
       {currentIndex > 0 && (
         <button className="back-button" onClick={handleBack}>Back</button>
       )}
@@ -58,5 +108,6 @@ function Navbar() {
 }
 
 export default Navbar;
+
 
 
