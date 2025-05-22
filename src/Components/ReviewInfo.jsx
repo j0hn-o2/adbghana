@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './ReviewInfo.css'
+import axios from 'axios';
 
 const ReviewPage = () => {
   const [personal, setPersonal] = useState({});
@@ -8,6 +9,8 @@ const ReviewPage = () => {
   const [security, setSecurity] = useState({});
   const [image, setImage] = useState(null);
 
+  const [genders, setGenders] = useState([]);
+
   useEffect(() => {
     setPersonal(JSON.parse(sessionStorage.getItem('personalInfo')) || {});
     setAddress(JSON.parse(sessionStorage.getItem('addressInfo')) || {});
@@ -15,6 +18,18 @@ const ReviewPage = () => {
     setSecurity(JSON.parse(sessionStorage.getItem('securityInfo')) || {});
     setImage(sessionStorage.getItem('profileImage'));
   }, []);
+
+  useEffect(() => {
+    axios.get("http://192.168.1.210:8000/api/genders/")
+      .then(res => setGenders(res.data))
+      .catch(err => console.error('Failed to load genders', err));
+  }, []);
+
+  const getGenderName = (code) => {
+    const match = genders.find(c => c.code === code);
+    return match ? match.name : code;
+  };
+
 
   return (
 
@@ -76,7 +91,7 @@ const ReviewPage = () => {
               <div className="value">{personal.dateOfBirth}</div>
 
               <div className="label">Gender:</div>
-              <div className="value">{personal.gender?.toUpperCase()}</div>
+              <div className="value">{getGenderName(personal.gender?.toUpperCase())}</div>
 
               <div className="label">Nationality:</div>
               <div className="value">{personal.nationality?.toUpperCase()}</div>

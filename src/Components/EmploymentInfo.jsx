@@ -1,10 +1,15 @@
 import React, { useRef, useEffect,useContext, forwardRef, useImperativeHandle } from 'react';
 import './EmploymentInfo.css'
 import { ImageContext } from '../context/ImageContext';
+import { useState } from 'react';
+import axios from 'axios';
 
 const EmploymentInfo = forwardRef((props, ref) => {
   const formRef = useRef();
   const { image } = useContext(ImageContext);
+  const [employmentstatus, setEmploymentstatus] = useState([]);
+
+  
 
   useImperativeHandle(ref, () => ({
     validateAndSave: () => {
@@ -15,7 +20,7 @@ const EmploymentInfo = forwardRef((props, ref) => {
 
       console.log('[Employment Form] Data entries:', [...formData.entries()]); // ✅ Debugging
 
-      const requiredFields = ['employmentStatus', 'occupation', 'employerName', 'monthlyIncome', 'incomeSource'];
+      const requiredFields = ['employmentstatus', 'occupation', 'employerName', 'monthlyIncome', 'incomeSource'];
       const data = {};
       let isValid = true;
 
@@ -46,6 +51,9 @@ const EmploymentInfo = forwardRef((props, ref) => {
         if (input) input.value = data[key];
       });
     }
+     axios.get("http://192.168.1.210:8000/api/employmentstatus/")
+          .then(res => setEmploymentstatus(res.data))
+          .catch(err => console.error('Failed to load regions:', err));
   }, []);
 
   return (
@@ -97,13 +105,26 @@ const EmploymentInfo = forwardRef((props, ref) => {
             
               <div className="form-group-employment">
                   <label htmlFor="employmentStatus">Employment Status:</label>
-                  <select id="employmentStatus" name="employmentStatus"  required>
+                  <select
+          id="employmentstatus"
+          name="employmentstatus"
+          // value={selectedRegion}
+          // onChange={handleRegionChange}
+          className="select-address"
+          required
+        >
+          <option value="">Select a region</option>
+          {employmentstatus.map(employmentstatus => (
+            <option key={employmentstatus.id} value={employmentstatus.id}>{employmentstatus.name}</option>
+          ))}
+        </select>
+                  {/* <select id="employmentStatus" name="employmentStatus"  required>
                       <option value="">Select status</option>
                       <option value="employed">Employed</option>
                       <option value="selfEmployed">Self-Employed</option>
                       <option value="unemployed">Unemployed</option>
                       <option value="student">Student</option>
-                  </select>
+                  </select> */}
               </div>
 
               <div className="form-group-employment">
@@ -118,13 +139,14 @@ const EmploymentInfo = forwardRef((props, ref) => {
 
               <div className="form-group-employment">
                 <label htmlFor="monthlyIncome">Monthly Income Range:</label>
-                <select id="monthlyIncome" name="monthlyIncome" required>
+                {/* <select id="monthlyIncome" name="monthlyIncome" required>
                   <option value="">Select range</option>
                   <option value="below1000">Below 1,000</option>
                   <option value="1000to2000">1,000 - 2,000</option>
                   <option value="2000to5000">2,000 - 5,000</option>
                   <option value="above5000">Above 5,000</option>
-                </select>
+                </select> */}
+                <input type="text" id="monthlyIncome" name='monthlyIncome' placeholder='Monthly Income' required></input>
               </div>
 
               <div className="form-group-employment full-width">

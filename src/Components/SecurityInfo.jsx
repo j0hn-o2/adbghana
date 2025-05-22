@@ -2,11 +2,13 @@ import React, { useRef, useEffect,useContext, forwardRef, useState, useImperativ
 import './SecurityInfo.css'
 import { ImageContext } from '../context/ImageContext';
 import './ImageUpload.css';
+import axios from 'axios';
 
 
 const SecurityInfo = forwardRef((props,ref) => {
   const formRef={useRef};
   const { image } = useContext(ImageContext);
+  const [securityquestions, setSecurityquestions] = useState([]);
   // const [showPassword, setShowPassword] = useState(false);
 
   useImperativeHandle(ref, () => ({
@@ -14,7 +16,7 @@ const SecurityInfo = forwardRef((props,ref) => {
       const form = formRef.current;
       const formData = new FormData(form);
 
-      const requiredFields = ['username','password', 'confirmPassword', 'securityQuestion', 'securityAnswer','transactionPin'];
+      const requiredFields = ['username','password', 'confirmPassword', 'securityquestions', 'securityAnswer','transactionPin'];
       const data = {};
       let isValid = true;
       
@@ -50,7 +52,17 @@ const SecurityInfo = forwardRef((props,ref) => {
         if (input) input.value = data[key];
       });
     }
+
+    // axios.get("http://192.168.1.210:8000/api/securityquestions/")
+    //           .then(res => setSecurityquestions(res.data))
+    //           .catch(err => console.error('Failed to load regions:', err));
   }, []);
+
+  useEffect(() => {
+  axios.get("http://192.168.1.210:8000/api/securityquestions/")
+    .then(res => setSecurityquestions(res.data))
+    .catch(err => console.error('Failed to load security questions', err));
+}, []); 
 
 
 
@@ -116,13 +128,26 @@ const SecurityInfo = forwardRef((props,ref) => {
 
               <div className="form-group-security">
                 <label htmlFor="securityQuestion">Security Question:</label>
-                <select id="securityQuestion" name="securityQuestion" required>
+                 <select
+          id="securityquestions"
+          name="securityquestions"
+          // value={selectedRegion}
+          // onChange={handleRegionChange}
+          className="select-address"
+          required
+        >
+          <option value="">Select a region</option>
+          {securityquestions.map(securityquestions => (
+            <option key={securityquestions.id} value={securityquestions.id}>{securityquestions.question}</option>
+          ))}
+        </select>
+                {/* <select id="securityQuestion" name="securityQuestion" required>
                   <option value="">Select from list</option>
                   <option value="petName">What is the name of your first pet?</option>
                   <option value="motherMaidenName">What is your mother's maiden name?</option>
                   <option value="favoriteColor">What is your favorite color?</option>
                   <option value="birthCity">In what city were you born?</option>
-                </select>
+                </select> */}
               </div>
 
               <div className="form-group-security">
