@@ -242,7 +242,7 @@ const OccupationDropdown = () => {
   const [occupations, setOccupations] = useState([]);
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/occupations/")
+    axios.get("http://192.168.1.210:8000/api/occupations/")
       .then((response) => {
         setOccupations(response.data);
       })
