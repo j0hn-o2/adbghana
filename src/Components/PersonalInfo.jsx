@@ -40,7 +40,7 @@ const PersonalInfo = forwardRef((props, ref) => {
       setImage(savedImage);
     }
 
-    axios.get("http://192.168.1.211:8000/api/genders/")
+    axios.get("https://f3b4-2c0f-2a80-7ac-910-e531-6726-d29-e16a.ngrok-free.app/api/genders/")
 
   .then(res => {
       setGenders(res.data);
@@ -53,7 +53,7 @@ const PersonalInfo = forwardRef((props, ref) => {
     })
     .catch(err => console.error('Failed to load genders:', err));
 
-    axios.get("http://192.168.1.211:8000/api/nationalities/")
+    axios.get("https://192.168.1.211:8000/api/nationalities/")
     .then((response) => {
         setNationalities(response.data);
       })
@@ -61,7 +61,7 @@ const PersonalInfo = forwardRef((props, ref) => {
         console.error("Error fetching nationalities:", error);
     });
 
-    axios.get("http://192.168.1.211:8000/api/maritalstatus/")
+    axios.get("https://192.168.1.211:8000/api/maritalstatus/")
     .then((response) => {
         setMaritalstatus(response.data);
       })
@@ -69,7 +69,7 @@ const PersonalInfo = forwardRef((props, ref) => {
         console.error("Error fetching marital status:", error);
     });
 
-    axios.get("http://192.168.1.211:8000/api/accounttypes/")
+    axios.get("https://192.168.1.211:8000/api/accounttypes/")
     .then((response) => {
         setAccounttypes(response.data);
       })
