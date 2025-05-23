@@ -16,7 +16,7 @@ const SecurityInfo = forwardRef((props,ref) => {
       const form = formRef.current;
       const formData = new FormData(form);
 
-      const requiredFields = ['username','password', 'confirmPassword', 'securityquestions', 'securityAnswer','transactionPin'];
+      const requiredFields = ['username','password'/* 'confirm_password'*/, 'question', 'answer','pin'];
       const data = {};
       let isValid = true;
       
@@ -27,10 +27,10 @@ const SecurityInfo = forwardRef((props,ref) => {
         data[field] = value;
       });
 
-      if (data.password !== data.confirmPassword) {
-        isValid = false;
-        alert("Password and confirmation Password must match.");
-      }
+      // if (data.password !== data.confirmPassword) {
+      //   isValid = false;
+      //   alert("Password and confirmation Password must match.");
+      // }
 
       if (isValid) {
         sessionStorage.setItem('securityInfo', JSON.stringify(data));
@@ -59,7 +59,7 @@ const SecurityInfo = forwardRef((props,ref) => {
   }, []);
 
   useEffect(() => {
-  axios.get("http://192.168.1.210:8000/api/securityquestions/")
+  axios.get("http://192.168.1.211:8000/api/securityquestions/")
     .then(res => setSecurityquestions(res.data))
     .catch(err => console.error('Failed to load security questions', err));
 }, []); 
@@ -120,17 +120,17 @@ const SecurityInfo = forwardRef((props,ref) => {
                 {/* <span className="toggle-icon" onClick={() => setShowPassword(!showPassword)}>{showPassword ? '🙈' : '👁️'}</span> */}
               </div>
 
-              <div className="form-group-security">
+              {/* <div className="form-group-security">
                 <label htmlFor="confirmPassword">Confirm Password:</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" placeholder='Confirm password' required></input>
-                {/* <span className="toggle-icon" onClick={() => setShowPassword(!showPassword)}>{showPassword ? '🙈' : '👁️'}</span> */}
-              </div>
+                
+              </div> */}
 
               <div className="form-group-security">
                 <label htmlFor="securityQuestion">Security Question:</label>
                  <select
           id="securityquestions"
-          name="securityquestions"
+          name="question"
           // value={selectedRegion}
           // onChange={handleRegionChange}
           className="select-address"
@@ -152,12 +152,12 @@ const SecurityInfo = forwardRef((props,ref) => {
 
               <div className="form-group-security">
                 <label htmlFor="securityAnswer">Security Answer:</label>
-                <input type="text" id="securityAnswer" name="securityAnswer" placeholder='Enter answer' required></input>
+                <input type="text" id="securityAnswer" name="answer" placeholder='Enter answer' required></input>
               </div>
 
               <div className="form-group-security full-width">
                   <label htmlFor="transactionPin">Set 4-digit Transaction Pin:</label>
-                  <input type="password" id="transactionPin" name="transactionPin" placeholder='Enter PIN' required></input>
+                  <input type="password" id="transactionPin" name="pin" placeholder='Enter PIN' required></input>
               </div>
 
 

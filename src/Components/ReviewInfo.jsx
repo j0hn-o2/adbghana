@@ -16,7 +16,7 @@ const ReviewPage = () => {
     setAddress(JSON.parse(sessionStorage.getItem('addressInfo')) || {});
     setEmployment(JSON.parse(sessionStorage.getItem('employmentInfo')) || {});
     setSecurity(JSON.parse(sessionStorage.getItem('securityInfo')) || {});
-    setImage(sessionStorage.getItem('profileImage'));
+    setImage(sessionStorage.getItem('image'));
   }, []);
 
   useEffect(() => {
@@ -79,16 +79,16 @@ const ReviewPage = () => {
             <div className="review-grid">
 
               <div className="label">First Name:</div>
-              <div className="value">{personal.firstName?.toUpperCase()}</div>
+              <div className="value">{personal.first_name?.toUpperCase()}</div>
 
               <div className="label">Middle Name:</div>
-              <div className="value">{personal.middleName?.toUpperCase()}</div>
+              <div className="value">{personal.middle_name?.toUpperCase()}</div>
 
               <div className="label">Last Name:</div>
-              <div className="value">{personal.lastName?.toUpperCase()}</div>
+              <div className="value">{personal.last_name?.toUpperCase()}</div>
 
               <div className="label">Date of Birth:</div>
-              <div className="value">{personal.dateOfBirth}</div>
+              <div className="value">{personal.dob}</div>
 
               <div className="label">Gender:</div>
               <div className="value">{getGenderName(personal.gender?.toUpperCase())}</div>
@@ -97,25 +97,25 @@ const ReviewPage = () => {
               <div className="value">{personal.nationality?.toUpperCase()}</div>
 
               <div className="label">Ghana Card Number:</div>
-              <div className="value">{personal.ghanaCard?.toUpperCase()}</div>
+              <div className="value">{personal.gh_card_number?.toUpperCase()}</div>
 
               <div className="label">Maiden Name:</div>
-              <div className="value">{personal.maidenName?.toUpperCase()}</div>
+              <div className="value">{personal.mom_maiden_name?.toUpperCase()}</div>
 
               <div className="label">Marital Status:</div>
-              <div className="value">{personal.maritalStatus?.toUpperCase()}</div>
+              <div className="value">{personal.marital_status?.toUpperCase()}</div>
 
               <div className="label">Account Type: </div>
-              <div className="value">{personal.accountType?.toUpperCase()}</div>
+              <div className="value">{personal.account_type?.toUpperCase()}</div>
 
               <div className="label">Account Category:</div>
-              <div className="value">{personal.accountCategory?.toUpperCase()}</div>
+              <div className="value">{personal.account_category?.toUpperCase()}</div>
 
               <div className="label">Email:</div>
               <div className="value">{personal.email?.toUpperCase()}</div>  
 
               <div className="label">Phone:</div>
-              <div className="value">{personal.phone}</div>
+              <div className="value">{personal.phone_number}</div>
             </div>
 
             <h3>Address Information</h3>
@@ -130,10 +130,10 @@ const ReviewPage = () => {
               <div className="value">{address.city?.toUpperCase()}</div>
 
               <div className="label">Residential Address: </div>
-              <div className="value">{address.residentialAddress?.toUpperCase()}</div>
+              <div className="value">{address.residential_address?.toUpperCase()}</div>
 
               <div className="label">Digital Address: </div>
-              <div className="value">{address.digitalAddress?.toUpperCase()}</div>
+              <div className="value">{address.gps_digital_address?.toUpperCase()}</div>
 
             </div>
 
@@ -143,19 +143,19 @@ const ReviewPage = () => {
             <div className="review-grid">
               
               <div className="label">Employment Status:</div>
-              <div className="value">{employment.employmentStatus?.toUpperCase()}</div>
+              <div className="value">{employment.employment_status?.toUpperCase()}</div>
 
               <div className="label">Occupation:</div>
               <div className="value">{employment.occupation?.toUpperCase()}</div>
 
               <div className="label">Employer Name:</div>
-              <div className="value">{employment.employerName?.toUpperCase()}</div>
+              <div className="value">{employment.employer?.toUpperCase()}</div>
 
               <div className="label">Monthly Income: </div>
-              <div className="value">{employment.monthlyIncome}</div>
+              <div className="value">{employment.income}</div>
 
               <div className="label">Source of Funds:</div>
-              <div className="value">{employment.incomeSource?.toUpperCase()}</div>
+              <div className="value">{employment.source_of_funds?.toUpperCase()}</div>
             </div>
 
           </div>

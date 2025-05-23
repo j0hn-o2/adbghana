@@ -142,21 +142,22 @@
 
 // export default AddressInfo;
 
-import React, { useEffect, useState, forwardRef, useImperativeHandle, useRef } from 'react';
+import React, { useEffect, useState,useContext, forwardRef, useImperativeHandle, useRef } from 'react';
 import axios from 'axios';
+import { ImageContext } from '../context/ImageContext';
 import "./AddressInfo.css"
 
 const AddressInfo = forwardRef((props, ref) => {
   const formRef = useRef();
+  const { image } = useContext(ImageContext);
   const [regions, setRegions] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [errors, setErrors] = useState({});
 
-  // Fetch regions on load
   useEffect(() => {
-    axios.get("http://192.168.1.210:8000/api/regions/")
+    axios.get("http://192.168.1.211:8000/api/regions/")
       .then(res => setRegions(res.data))
       .catch(err => console.error('Failed to load regions:', err));
 
@@ -167,14 +168,13 @@ const AddressInfo = forwardRef((props, ref) => {
     }
   }, []);
 
-  // Fetch cities when a region is selected
   const handleRegionChange = (e) => {
     const regionId = e.target.value;
     setSelectedRegion(regionId);
     setCities([]);
     setSelectedCity('');
 
-    axios.get(`http://192.168.1.210:8000/api/cities/region/${regionId}/`)
+    axios.get(`http://192.168.1.211:8000/api/cities/region/${regionId}/`)
       .then(res => setCities(res.data))
       .catch(err => console.error('Failed to load cities:', err));
   };
@@ -184,8 +184,8 @@ const AddressInfo = forwardRef((props, ref) => {
       const form = formRef.current;
       const formData = new FormData(form);
 
-      const residentialAddress = formData.get('residentialAddress')?.trim();
-      const digitalAddress = formData.get('digitalAddress')?.trim();
+      const residential_address = formData.get('residential_address')?.trim();
+      const gps_digital_address = formData.get('gps_digital_address')?.trim();
 
       const newErrors = {};
       let isValid = true;
@@ -198,11 +198,11 @@ const AddressInfo = forwardRef((props, ref) => {
         newErrors.city = 'Please select a city';
         isValid = false;
       }
-      if (!residentialAddress) {
+      if (!residential_address) {
         newErrors.residentialAddress = 'This field is required';
         isValid = false;
       }
-      if (!digitalAddress) {
+      if (!gps_digital_address) {
         newErrors.digitalAddress = 'This field is required';
         isValid = false;
       }
@@ -211,21 +211,52 @@ const AddressInfo = forwardRef((props, ref) => {
 
       if (isValid) {
         sessionStorage.setItem('addressInfo', JSON.stringify({
-          region: selectedRegion,
+          // region: selectedRegion,
           city: selectedCity,
-          residentialAddress,
-          digitalAddress
+          residential_address:residential_address,
+          gps_digital_address:gps_digital_address,
         }));
         sessionStorage.setItem('stepCompleted:/address', 'true');
       }
+
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+      }
+
 
       return isValid;
     }
   }));
 
   return (
-    <form ref={formRef} className="form-section">
+    <form ref={formRef} className="grid-form-address">
       <div className="form-group-address">
+        <div className="photo-upload-address">
+
+            <div className="image-upload-container">
+              {image ? (
+                <img src={image} alt="Uploaded" className="image-preview" />
+              ) : (
+                <div className="upload-placeholder">
+                  <div className="upload-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="upload-icon-svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      width="36"
+                      height="36"
+                    >
+                      <path d="M4 4h4l2-2h4l2 2h4a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm8 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z" />
+                    </svg>
+                  </div>
+                  <p className="upload-heading">No Photo Uploaded</p>
+                </div>
+              )}
+            </div>
+
+            
+          </div>
         <label htmlFor="region">Region:</label>
         <select
           id="region"
@@ -266,7 +297,7 @@ const AddressInfo = forwardRef((props, ref) => {
         <input
           type="text"
           id="residentialAddress"
-          name="residentialAddress"
+          name="residential_address"
           placeholder='Enter your Residential Address'
           required
         />
@@ -278,7 +309,7 @@ const AddressInfo = forwardRef((props, ref) => {
         <input
           type="text"
           id="digitalAddress"
-          name="digitalAddress"
+          name="gps_digital_address"
           placeholder='Enter your Digital Address'
           required
         />

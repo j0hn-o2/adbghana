@@ -5,6 +5,8 @@ import ImageUpload from './ImageUpload';
 import axios from "axios";
 
 const PersonalInfo = forwardRef((props, ref) => {
+  const [imageFile, setImageFile] = useState(null); // store the raw File
+
 
   const { image, setImage } = useContext(ImageContext);
   const formRef = useRef();
@@ -23,7 +25,6 @@ const PersonalInfo = forwardRef((props, ref) => {
   };
 
 
-
   useEffect(() => {
     const savedData = sessionStorage.getItem('personalInfo');
     if (savedData && formRef.current) {
@@ -34,17 +35,16 @@ const PersonalInfo = forwardRef((props, ref) => {
       });
     }
 
-    const savedImage = sessionStorage.getItem('profileImage');
+    const savedImage = sessionStorage.getItem('image');
     if (savedImage) {
       setImage(savedImage);
     }
 
-    axios.get("http://192.168.1.210:8000/api/genders/")
+    axios.get("http://192.168.1.211:8000/api/genders/")
 
   .then(res => {
       setGenders(res.data);
 
-      // Prefill from sessionStorage AFTER options are ready
       const saved = sessionStorage.getItem('personalInfo');
       if (saved) {
         const savedGenders = JSON.parse(saved).genders;
@@ -52,14 +52,8 @@ const PersonalInfo = forwardRef((props, ref) => {
       }
     })
     .catch(err => console.error('Failed to load genders:', err));
-    // .then((response) => {
-    //     setGenders(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching genders:", error);
-    // });
 
-    axios.get("http://192.168.1.210:8000/api/nationalities/")
+    axios.get("http://192.168.1.211:8000/api/nationalities/")
     .then((response) => {
         setNationalities(response.data);
       })
@@ -67,7 +61,7 @@ const PersonalInfo = forwardRef((props, ref) => {
         console.error("Error fetching nationalities:", error);
     });
 
-    axios.get("http://192.168.1.210:8000/api/maritalstatus/")
+    axios.get("http://192.168.1.211:8000/api/maritalstatus/")
     .then((response) => {
         setMaritalstatus(response.data);
       })
@@ -75,7 +69,7 @@ const PersonalInfo = forwardRef((props, ref) => {
         console.error("Error fetching marital status:", error);
     });
 
-    axios.get("http://192.168.1.210:8000/api/accounttypes/")
+    axios.get("http://192.168.1.211:8000/api/accounttypes/")
     .then((response) => {
         setAccounttypes(response.data);
       })
@@ -85,27 +79,16 @@ const PersonalInfo = forwardRef((props, ref) => {
   
   }, [setImage]);
 
-  //   useEffect(() => {
-    
-      // , []);
 
-//   return (
-//     <select>
-//       
-//     </select>
-//   );
-// };
-
-  
   useImperativeHandle(ref, () => ({
   
     validateAndSave: () => {
       const form = formRef.current;
       const formData = new FormData(form);
       const requiredFields = [
-        'firstName', 'lastName', 'dateOfBirth', 'gender', 'nationality',
-        'ghanaCard', 'maidenName', 'maritalStatus', 'accountType', 'accountCategory',
-        'email', 'phone'
+        'first_name', 'last_name', 'dob', 'gender', 'nationality',
+        'gh_card_number', 'mom_maiden_name', 'marital_status', 'account_type', 'account_category',
+        'email', 'phone_number'
       ];
       
 
@@ -141,12 +124,16 @@ const PersonalInfo = forwardRef((props, ref) => {
         newErrors.profileImage = "Profile photo is required.";
       }
 
-      setErrors(newErrors); 
+       if (imageFile) {
+    formData.append('image', imageFile); // field name must match backend
+  }
+
+      setErrors(newErrors);
 
       if (isValid) {
-        data.middleName = formData.get('middleName') || '';
+        data.middle_name = formData.get('middle_name') || '';
         sessionStorage.setItem('personalInfo', JSON.stringify(data));
-        sessionStorage.setItem('profileImage', image);
+        sessionStorage.setItem('image', image);
         sessionStorage.setItem('stepCompleted:/', 'true');
       }
 
@@ -179,7 +166,7 @@ const PersonalInfo = forwardRef((props, ref) => {
           <div className="photo-upload-personal">
              
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem' }}>
-              <ImageUpload image={image} setImage={setImage} />
+              <ImageUpload image={imageFile} setImage={setImageFile} />
               {errors.profileImage && (<p style={{ color: 'red', fontSize: '0.875rem', marginTop: '0.5rem' }}>{errors.profileImage}</p>)}
             </div>
 
@@ -196,35 +183,42 @@ const PersonalInfo = forwardRef((props, ref) => {
               
               <div className="form-group-personal">
                 <label htmlFor="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" required />
+                <input type="text" id="firstName" name="first_name" placeholder="Enter your first name" required />
                 {errors.firstName && <p className="error-text">{errors.firstName}</p>}
               </div>
 
               <div className="form-group-personal">
                 <label htmlFor="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required />
+                <input type="text" id="lastName" name="last_name" placeholder="Enter your last name" required />
                 {errors.lastName && <p className="error-text">{errors.lastName}</p>}
               </div>
 
               <div className="form-group-personal full-width">
                 <label htmlFor="middleName">Middle Name:</label>
-                <input type="text" id="middleName" name="middleName" placeholder="Enter your middle name(optional)" />
+                <input type="text" id="middleName" name="middle_name" placeholder="Enter your middle name(optional)" />
               </div>
 
               <div className="form-group-personal">
                 <label htmlFor="dateOfBirth">Date of Birth:</label>
-                <input type="date" id="dateOfBirth" name="dateOfBirth" required />
+                <input type="date" id="dateOfBirth" name="dob" required />
                 {errors.dateOfBirth && <p className="error-text">{errors.dateOfBirth}</p>}
               </div>
 
               <div className="form-group-personal">
                 <label htmlFor="gender">Gender:</label>
-                <select value={selectedGenders} onChange={(e) => setSelectedGenders(e.target.value)} name="gender" className='select-personal' required>
+                <select /*value={selectedGenders} onChange={(e) => setSelectedGenders(e.target.value)}*/ name="gender" className='select-personal' required>
 
                   <option value="">Select Gender</option>
-                   {genders.map((gender,index ) => (
+                  {/* <option value="male">male</option> */}
+                   {/* {genders.map((gender,index ) => (
                     <option key={index} value={gender.code}>
                       {gender.name}
+                    </option>
+                    ))} */}
+
+                   {genders.map((gen ) => (
+                    <option key={gen.id} value={gen.id}>
+                      {gen.name}
                     </option>
                     ))}
                   {/* <option value="">Select gender</option>
@@ -239,6 +233,7 @@ const PersonalInfo = forwardRef((props, ref) => {
                 <label htmlFor="nationality">Nationality:</label>
                 <select id="nationality" name="nationality" className='select-personal' defaultValue="Ghana" required>
                   <option value="">Select Nationality</option>
+                  {/* <option value="togo">togo</option> */}
                    {nationalities.map((nat) => (
                     <option key={nat.id} value={nat.id}>
                       {nat.name}
@@ -250,20 +245,21 @@ const PersonalInfo = forwardRef((props, ref) => {
 
               <div className="form-group-personal">
                 <label htmlFor="ghanaCard">Ghana Card Number:</label>
-                <input type="text" id="ghanaCard" name="ghanaCard" placeholder="Enter ID number" required />
+                <input type="text" id="ghanaCard" name="gh_card_number" placeholder="Enter ID number" required />
                 {errors.ghanaCard && <p className="error-text">{errors.ghanaCard}</p>}
               </div>
 
               <div className="form-group-personal">
                 <label htmlFor="maidenName">Mother's Maiden Name:</label>
-                <input type="text" id="maidenName" name="maidenName" placeholder="Enter Mother's Maiden Name" required />
+                <input type="text" id="maidenName" name="mom_maiden_name" placeholder="Enter Mother's Maiden Name" required />
                 {errors.maidenName && <p className="error-text">{errors.maidenName}</p>}
               </div>
 
               <div className="form-group-personal">
                 <label htmlFor="maritalStatus">Marital Status:</label>
-                <select id="maritalStatus" name="maritalStatus" className='select-personal' required>
+                <select id="maritalStatus" name="marital_status" className='select-personal' required>
                   {/* <option value="" >Select status</option> */}
+                  {/* <option value="single">Single</option> */}
 
                   <option value="">Select status</option>
                    {maritalstatus.map((mar) => (
@@ -289,14 +285,24 @@ const PersonalInfo = forwardRef((props, ref) => {
               
               <div className="form-group-personal">
                 <label htmlFor="accountCategory">Account Category:</label>
-                <input type="text" id="accountCategory" name="accountCategory" placeholder="Personal account" defaultValue="Personal Account" readOnly required />
+                <select id="accountType" name="account_category" className='select-personal' required>
+                  <option value="">Select category</option>
+                  <option value="1">Personal</option>
+
+                  {/* {accountcategories.map((accc) => (
+                    <option key={accc.id} value={accc.id}>
+                      {accc.name}
+                  </option>
+                  ))} */}
+                </select>
                 {errors.accountCategory && <p className="error-text">{errors.accountCategory}</p>}
               </div>
 
               <div className="form-group-personal">
                 <label htmlFor="accountType">Account Type:</label>
-                <select id="accountType" name="accountType" className='select-personal' required>
-                  <option value="">Select category</option>
+                <select id="accountType" name="account_type" className='select-personal' required>
+                  <option value="">Select type</option>
+                  {/* <option value="savings">savings</option> */}
                   {accounttypes.map((acc) => (
                     <option key={acc.id} value={acc.id}>
                       {acc.name}
@@ -317,7 +323,7 @@ const PersonalInfo = forwardRef((props, ref) => {
 
               <div className="form-group-personal">
                 <label htmlFor="phone">Phone Number:</label>
-                <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="Enter phone number" required />
+                <input type="tel" id="phone" name="phone_number" pattern="[0-9]{10}" placeholder="Enter phone number" required />
                 {errors.phone && <p className="error-text">{errors.phone}</p>}
               </div>
 
@@ -334,12 +340,4 @@ const PersonalInfo = forwardRef((props, ref) => {
 
 export default PersonalInfo;
 
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
 
-// const OccupationDropdown = () => {
- 
-
-
-
-// export default OccupationDropdown;

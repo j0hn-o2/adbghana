@@ -68,8 +68,7 @@ function Navbar({ personalRef, addressRef, employmentRef, securityRef, onSubmit}
                 const currentPath = steps[currentIndex].path;
 
                 let valid = true;
-
-                // Check validation for current step BEFORE allowing jump
+                
                 if (currentPath === '/' && personalRef?.current?.validateAndSave) {
                   valid = personalRef.current.validateAndSave();
                 }

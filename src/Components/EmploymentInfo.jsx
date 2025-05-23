@@ -8,6 +8,7 @@ const EmploymentInfo = forwardRef((props, ref) => {
   const formRef = useRef();
   const { image } = useContext(ImageContext);
   const [employmentstatus, setEmploymentstatus] = useState([]);
+   const [occupations, setOccupations] = useState([]);
 
   
 
@@ -20,7 +21,7 @@ const EmploymentInfo = forwardRef((props, ref) => {
 
       console.log('[Employment Form] Data entries:', [...formData.entries()]); // ✅ Debugging
 
-      const requiredFields = ['employmentstatus', 'occupation', 'employerName', 'monthlyIncome', 'incomeSource'];
+      const requiredFields = ['employment_status', 'occupation', 'employer', 'income', 'source_of_funds'];
       const data = {};
       let isValid = true;
 
@@ -39,6 +40,8 @@ const EmploymentInfo = forwardRef((props, ref) => {
       }
 
       return isValid;
+
+      
     }
   }));
 
@@ -51,9 +54,13 @@ const EmploymentInfo = forwardRef((props, ref) => {
         if (input) input.value = data[key];
       });
     }
-     axios.get("http://192.168.1.210:8000/api/employmentstatus/")
+     axios.get("http://192.168.1.211:8000/api/employmentstatus/")
           .then(res => setEmploymentstatus(res.data))
           .catch(err => console.error('Failed to load regions:', err));
+
+     axios.get("http://192.168.1.211:8000/api/occupations/")
+          .then(res => setOccupations(res.data))
+          .catch(err => console.error('Failed to load occupation:', err));
   }, []);
 
   return (
@@ -107,7 +114,7 @@ const EmploymentInfo = forwardRef((props, ref) => {
                   <label htmlFor="employmentStatus">Employment Status:</label>
                   <select
           id="employmentstatus"
-          name="employmentstatus"
+          name="employment_status"
           // value={selectedRegion}
           // onChange={handleRegionChange}
           className="select-address"
@@ -129,12 +136,18 @@ const EmploymentInfo = forwardRef((props, ref) => {
 
               <div className="form-group-employment">
                 <label htmlFor="occupation">Occupation:</label>
-                <input type="text" id="occupation" name="occupation" placeholder='Enter your occupation'required></input>
+                {/* <input type="text" id="occupation" name="occupation" placeholder='Enter your occupation'required></input> */}
+                <select id='occupation' name="occupation" required className='select-address'>
+                <option value="">Select an occupation</option>
+                  {occupations.map(occupations => (
+                    <option key={occupations.id} value={occupations.id}>{occupations.name}</option>
+                  ))}
+                </select>
               </div>
 
               <div className="form-group-employment">
                 <label htmlFor="employerName">Employer Name:</label>
-                <input type="text" id="employerName" name="employerName"placeholder='Enter your employer name' required></input>
+                <input type="text" id="employerName" name="employer"placeholder='Enter your employer name' required></input>
               </div>
 
               <div className="form-group-employment">
@@ -146,12 +159,12 @@ const EmploymentInfo = forwardRef((props, ref) => {
                   <option value="2000to5000">2,000 - 5,000</option>
                   <option value="above5000">Above 5,000</option>
                 </select> */}
-                <input type="text" id="monthlyIncome" name='monthlyIncome' placeholder='Monthly Income' required></input>
+                <input type="text" id="monthlyIncome" name='income' placeholder='Monthly Income' required></input>
               </div>
 
               <div className="form-group-employment full-width">
                   <label htmlFor="incomeSource">Source of Funds:</label>
-                  <input type="text" id="incomeSource" name="incomeSource" placeholder='Enter source of funds'required></input>
+                  <input type="text" id="incomeSource" name="source_of_funds" placeholder='Enter source of funds'required></input>
               </div>
             </form>
           </div>
