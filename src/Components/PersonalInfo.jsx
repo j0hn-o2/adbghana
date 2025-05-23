@@ -40,7 +40,7 @@ const PersonalInfo = forwardRef((props, ref) => {
       setImage(savedImage);
     }
 
-    axios.get("https://f3b4-2c0f-2a80-7ac-910-e531-6726-d29-e16a.ngrok-free.app/api/genders/")
+    axios.get("https://192.168.1.211:8000/api/genders/")
 
   .then(res => {
       setGenders(res.data);
