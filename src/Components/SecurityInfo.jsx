@@ -27,10 +27,10 @@ const SecurityInfo = forwardRef((props,ref) => {
         data[field] = value;
       });
 
-      // if (data.password !== data.confirmPassword) {
-      //   isValid = false;
-      //   alert("Password and confirmation Password must match.");
-      // }
+      if (data.password !== data.confirmPassword) {
+        // isValid = false;
+        alert("Password and confirmation Password must match.");
+      }
 
       if (isValid) {
         sessionStorage.setItem('securityInfo', JSON.stringify(data));
@@ -120,11 +120,11 @@ const SecurityInfo = forwardRef((props,ref) => {
                 {/* <span className="toggle-icon" onClick={() => setShowPassword(!showPassword)}>{showPassword ? '🙈' : '👁️'}</span> */}
               </div>
 
-              {/* <div className="form-group-security">
+              <div className="form-group-security">
                 <label htmlFor="confirmPassword">Confirm Password:</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" placeholder='Confirm password' required></input>
                 
-              </div> */}
+              </div>
 
               <div className="form-group-security">
                 <label htmlFor="securityQuestion">Security Question:</label>
