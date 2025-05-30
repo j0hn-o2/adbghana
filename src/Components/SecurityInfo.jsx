@@ -16,7 +16,7 @@ const SecurityInfo = forwardRef((props,ref) => {
       const form = formRef.current;
       const formData = new FormData(form);
 
-      const requiredFields = ['username','password'/* 'confirm_password'*/, 'question', 'answer','pin'];
+      const requiredFields = [/*'username','password', 'confirm_password', 'question', 'answer','pin'*/];
       const data = {};
       let isValid = true;
       

@@ -86,9 +86,9 @@ const PersonalInfo = forwardRef((props, ref) => {
       const form = formRef.current;
       const formData = new FormData(form);
       const requiredFields = [
-        'first_name', 'last_name', 'dob', 'gender', 'nationality',
-        'gh_card_number', 'mom_maiden_name', 'marital_status', 'account_type', 'account_category',
-        'email', 'phone_number'
+        // 'first_name', 'last_name', 'dob', 'gender', 'nationality',
+        // 'gh_card_number', 'mom_maiden_name', 'marital_status', 'account_type', 'account_category',
+        // 'email', 'phone_number'
       ];
       
 
@@ -120,8 +120,8 @@ const PersonalInfo = forwardRef((props, ref) => {
 
 
       if (!image) {
-        isValid = false;
-        newErrors.profileImage = "Profile photo is required.";
+        // isValid = false;
+        // newErrors.profileImage = "Profile photo is required.";
       }
 
        if (imageFile) {
@@ -167,7 +167,7 @@ const PersonalInfo = forwardRef((props, ref) => {
              
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem' }}>
               <ImageUpload image={imageFile} setImage={setImageFile} />
-              {errors.profileImage && (<p style={{ color: 'red', fontSize: '0.875rem', marginTop: '0.5rem' }}>{errors.profileImage}</p>)}
+              {/* {errors.profileImage && (<p style={{ color: 'red', fontSize: '0.875rem', marginTop: '0.5rem' }}>{errors.profileImage}</p>)} */}
             </div>
 
           </div>
@@ -184,13 +184,13 @@ const PersonalInfo = forwardRef((props, ref) => {
               <div className="form-group-personal">
                 <label htmlFor="firstName">First Name:</label>
                 <input type="text" id="firstName" name="first_name" placeholder="Enter your first name" required />
-                {errors.firstName && <p className="error-text">{errors.firstName}</p>}
+                {errors.first_name && <p className="error-text">{errors.first_name}</p>}
               </div>
 
               <div className="form-group-personal">
                 <label htmlFor="lastName">Last Name:</label>
                 <input type="text" id="lastName" name="last_name" placeholder="Enter your last name" required />
-                {errors.lastName && <p className="error-text">{errors.lastName}</p>}
+                {errors.last_name && <p className="error-text">{errors.last_name}</p>}
               </div>
 
               <div className="form-group-personal full-width">
@@ -201,30 +201,30 @@ const PersonalInfo = forwardRef((props, ref) => {
               <div className="form-group-personal">
                 <label htmlFor="dateOfBirth">Date of Birth:</label>
                 <input type="date" id="dateOfBirth" name="dob" required />
-                {errors.dateOfBirth && <p className="error-text">{errors.dateOfBirth}</p>}
+                {errors.dob && <p className="error-text">{errors.dob}</p>}
               </div>
 
               <div className="form-group-personal">
                 <label htmlFor="gender">Gender:</label>
                 <select /*value={selectedGenders} onChange={(e) => setSelectedGenders(e.target.value)}*/ name="gender" className='select-personal' required>
 
-                  <option value="">Select Gender</option>
-                  {/* <option value="male">male</option> */}
-                   {/* {genders.map((gender,index ) => (
+                  {/* <option value="">Select Gender</option>
+                  <option value="male">male</option> */}
+                    {/* {genders.map((gender,index ) => (
                     <option key={index} value={gender.code}>
                       {gender.name}
                     </option>
                     ))} */}
 
-                   {genders.map((gen ) => (
+                   {/* {genders.map((gen ) => (
                     <option key={gen.id} value={gen.id}>
                       {gen.name}
                     </option>
-                    ))}
-                  {/* <option value="">Select gender</option>
+                    ))} */}
+                  <option value="">Select gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
-                  <option value="other">Other</option> */}
+                  <option value="other">Other</option>
                 </select>
                 {errors.gender && <p className="error-text">{errors.gender}</p>}
               </div>
@@ -233,12 +233,12 @@ const PersonalInfo = forwardRef((props, ref) => {
                 <label htmlFor="nationality">Nationality:</label>
                 <select id="nationality" name="nationality" className='select-personal' defaultValue="Ghana" required>
                   <option value="">Select Nationality</option>
-                  {/* <option value="togo">togo</option> */}
-                   {nationalities.map((nat) => (
+                  <option value="togo">Togo</option>
+                   {/* {nationalities.map((nat) => (
                     <option key={nat.id} value={nat.id}>
                       {nat.name}
                     </option>
-                    ))}
+                    ))} */}
                 </select>
                 {errors.nationality && <p className="error-text">{errors.nationality}</p>}
               </div>
@@ -246,34 +246,34 @@ const PersonalInfo = forwardRef((props, ref) => {
               <div className="form-group-personal">
                 <label htmlFor="ghanaCard">Ghana Card Number:</label>
                 <input type="text" id="ghanaCard" name="gh_card_number" placeholder="Enter ID number" required />
-                {errors.ghanaCard && <p className="error-text">{errors.ghanaCard}</p>}
+                {errors.gh_card_number && <p className="error-text">{errors.gh_card_number}</p>}
               </div>
 
               <div className="form-group-personal">
                 <label htmlFor="maidenName">Mother's Maiden Name:</label>
                 <input type="text" id="maidenName" name="mom_maiden_name" placeholder="Enter Mother's Maiden Name" required />
-                {errors.maidenName && <p className="error-text">{errors.maidenName}</p>}
+                {errors.mom_maiden_name && <p className="error-text">{errors.mom_maiden_name}</p>}
               </div>
 
               <div className="form-group-personal">
                 <label htmlFor="maritalStatus">Marital Status:</label>
                 <select id="maritalStatus" name="marital_status" className='select-personal' required>
-                  {/* <option value="" >Select status</option> */}
+                  <option value="" >Select status</option>
                   {/* <option value="single">Single</option> */}
 
-                  <option value="">Select status</option>
+                  {/* <option value="">Select status</option>
                    {maritalstatus.map((mar) => (
                     <option key={mar.id} value={mar.id}>
                       {mar.name}
                     </option>
-                    ))}
+                    ))} */}
 
-                  {/* <option value="single">Single</option>
+                  <option value="single">Single</option>
                   <option value="married">Married</option>
                   <option value="divorced">Divorced</option>
-                  <option value="widowed">Widowed</option> */}
+                  <option value="widowed">Widowed</option>
                 </select>
-                {errors.maritalStatus&& <p className="error-text">{errors.maritalStatus}</p>}
+                {errors.marital_status && <p className="error-text">{errors.marital_status}</p>}
               </div>
 
               
@@ -295,24 +295,23 @@ const PersonalInfo = forwardRef((props, ref) => {
                   </option>
                   ))} */}
                 </select>
-                {errors.accountCategory && <p className="error-text">{errors.accountCategory}</p>}
+                {errors.account_category && <p className="error-text">{errors.account_category}</p>}
               </div>
 
               <div className="form-group-personal">
                 <label htmlFor="accountType">Account Type:</label>
                 <select id="accountType" name="account_type" className='select-personal' required>
                   <option value="">Select type</option>
-                  {/* <option value="savings">savings</option> */}
-                  {accounttypes.map((acc) => (
+                  {/* {accounttypes.map((acc) => (
                     <option key={acc.id} value={acc.id}>
                       {acc.name}
                     </option>
-                  ))}
-                  {/* <option value="savings">Savings</option>
+                  ))} */}
+                  <option value="savings">Savings</option>
                   <option value="current">Current</option>
-                  <option value="fixed">Fixed Deposit</option> */}
+                  <option value="fixed">Fixed Deposit</option>
                 </select>
-                {errors.accountType && <p className="error-text">{errors.accountType}</p>}
+                {errors.account_type && <p className="error-text">{errors.account_type}</p>}
               </div>
 
               <div className="form-group-personal">
@@ -324,7 +323,7 @@ const PersonalInfo = forwardRef((props, ref) => {
               <div className="form-group-personal">
                 <label htmlFor="phone">Phone Number:</label>
                 <input type="tel" id="phone" name="phone_number" pattern="[0-9]{10}" placeholder="Enter phone number" required />
-                {errors.phone && <p className="error-text">{errors.phone}</p>}
+                {errors.phone_number && <p className="error-text">{errors.phone_number}</p>}
               </div>
 
               

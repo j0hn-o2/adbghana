@@ -21,7 +21,7 @@ const EmploymentInfo = forwardRef((props, ref) => {
 
       console.log('[Employment Form] Data entries:', [...formData.entries()]); // ✅ Debugging
 
-      const requiredFields = ['employment_status', 'occupation', 'employer', 'income', 'source_of_funds'];
+      const requiredFields = [/*'employment_status', 'occupation', 'employer', 'income', 'source_of_funds'*/];
       const data = {};
       let isValid = true;
 
