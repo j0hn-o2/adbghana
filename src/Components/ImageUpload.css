@@ -136,3 +136,8 @@
 .remove-button:hover {
   background-color: #cc1f1a;
 }
+
+.image-upload-container.drag-over {
+  border-color: #00703c;
+  background-color: #e6f5ec;
+}
