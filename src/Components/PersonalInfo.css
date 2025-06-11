@@ -121,6 +121,25 @@ h3 {
 }
 
 
+.select-personal {
+  color: black;
+}
+
+
+.select-personal:invalid {
+  color: gray;
+}
+
+input[type="date"] {
+  color: gray;
+}
+
+/* Optional: Turn text black after a value is selected (using JS) */
+input[type="date"].has-value {
+  color: black;
+}
+
+
 .grid-form-personal{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -161,6 +180,7 @@ h3 {
   margin-top: 15px;
   height: 60px;
 }
+
 
 .error-text {
   color: red;

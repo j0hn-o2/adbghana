@@ -158,3 +158,11 @@ h3 {
   margin-top: 15px;
   height: 60px;
 }
+
+.select-address {
+  color: black;
+}
+
+.select-address:invalid {
+  color: gray;
+}

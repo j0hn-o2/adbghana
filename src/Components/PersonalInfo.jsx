@@ -3,17 +3,26 @@ import './PersonalInfo.css';
 import { ImageContext } from '../context/ImageContext';
 import ImageUpload from './ImageUpload';
 import axios from "axios";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { format } from 'date-fns';
 
 const PersonalInfo = forwardRef((props, ref) => {
   const [imageFile, setImageFile] = useState(null);
   const { image, setImage } = useContext(ImageContext);
   const formRef = useRef();
   const [errors, setErrors] = useState({});
+  // const [isFocused, setIsFocused] = useState(false);
+  
 
   const [genders, setGenders] = useState([]);
+  const [dob, setDob] = useState("");
   const [nationalities, setNationalities] = useState([]);
   const [maritalstatus, setMaritalstatus] = useState([]);
   const [accounttypes, setAccounttypes] = useState([]);
+  // const inputType = !dob && !isFocused ? 'text' : 'date';
+  const [startDate, setStartDate] = useState(null);
+
 
   const [selectedGender, setSelectedGender] = useState('');
   const [selectedNationality, setSelectedNationality] = useState('');
@@ -65,7 +74,7 @@ const PersonalInfo = forwardRef((props, ref) => {
       const formData = new FormData(form);
       const requiredFields = [
         'first_name', 'last_name', 'dob',
-        'gh_card_number', 'mom_maiden_name',
+        'gh_card_number', 'mom_maiden_name','gender','nationality','marital_status','account_type','account_category',
         'email', 'phone_number'
       ];
 
@@ -87,23 +96,23 @@ const PersonalInfo = forwardRef((props, ref) => {
       // Validate selects
       if (!selectedGender) {
         isValid = false;
-        newErrors.gender = "Gender is required.";
+        // newErrors.gender = "Gender is required.";
       }
       if (!selectedNationality) {
         isValid = false;
-        newErrors.nationality = "Nationality is required.";
+        // newErrors.nationality = "Nationality is required.";
       }
       if (!selectedMaritalStatus) {
         isValid = false;
-        newErrors.marital_status = "Marital Status is required.";
+        // newErrors.marital_status = "Marital Status is required.";
       }
       if (!selectedAccountType) {
         isValid = false;
-        newErrors.account_type = "Account Type is required.";
+        // newErrors.account_type = "Account Type is required.";
       }
       if (!selectedAccountCategory) {
         isValid = false;
-        newErrors.account_category = "Account Category is required.";
+        // newErrors.account_category = "Account Category is required.";
       }
 
       // Email format validation
@@ -203,11 +212,25 @@ const PersonalInfo = forwardRef((props, ref) => {
                 <input type="text" id="middleName" name="middle_name" placeholder="Enter your middle name (optional)" />
               </div>
 
-              <div className="form-group-personal">
+              {/* <div className="form-group-personal">
                 <label htmlFor="dateOfBirth">Date of Birth:</label>
                 <input type="date" id="dateOfBirth" name="dob" required />
                 {errors.dob && <p className="error-text">{errors.dob}</p>}
-              </div>
+              </div> */}
+              <div className="form-group-personal">
+      <label htmlFor="dateOfBirth">Date of Birth:</label>
+      <input
+        type="date"
+        id="dateOfBirth"
+        name="dob"
+        value={dob}
+        onChange={(e) => setDob(e.target.value)}
+        className={dob ? 'has-value' : ''}
+        required
+      />
+      {errors.dob && <p className="error-text">{errors.dob}</p>}
+    </div>
+
 
               <div className="form-group-personal">
                 <label htmlFor="gender">Gender:</label>

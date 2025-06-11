@@ -165,3 +165,12 @@ h3 {
   font-size: 1.2rem;
   color: #666;
 }
+
+.select-security{
+  color: black;
+}
+
+
+.select-security:invalid {
+  color: gray
+}

@@ -104,6 +104,7 @@ function Navbar({ personalRef, addressRef, employmentRef, securityRef, onSubmit 
         <button className="back-button" onClick={handleBack}>
           Back
         </button>
+        
       )}
 
       <button className="next-button" onClick={handleNext}>
